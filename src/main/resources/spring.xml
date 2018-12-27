@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop = "http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context.xsd
+http://www.springframework.org/schema/aop
+   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+<bean id="triangle" class="org.fer.model.Triangle">
+    <property name="a" ref="a"/>
+    <property name="b" ref="secondPoint"/>
+    <property name="c" ref="c"/>
+</bean>
+
+<bean id="circle" class="org.fer.model.Circle" init-method="myInit" destroy-method="myDestroy">
+    <property name="zeroPoint">
+        <bean class="org.fer.model.Point">
+            <property name="x" value="100"/>
+            <property name="y" value="1000"/>
+        </bean>
+    </property>
+</bean>
+
+<bean id="a" class="org.fer.model.Point">
+    <property name="x" value="0" ></property>
+    <property name="y" value="0" ></property>
+</bean>
+    <bean id="b" class="org.fer.model.Point">
+        <property name="x" value="10" ></property>
+        <property name="y" value="20" ></property>
+    </bean>
+    <bean id="c" class="org.fer.model.Point">
+        <constructor-arg index="0" value="5"/>
+        <constructor-arg index="1" value="50"/>
+    </bean>
+
+    <alias name="b" alias="secondPoint"/>
+
+
+    <bean id="square" class="org.fer.model.Square">
+        <property name="pointList">
+            <list merge="true">
+                <ref bean="a"/>
+                <ref bean="b"/>
+                <ref bean="c"/>
+            </list>
+        </property>
+
+        <property name="pointSet">
+            <set>
+                <ref bean="a" />
+                <ref bean="b" />
+            </set>
+        </property>
+
+        <property name="pointMap">
+            <map merge="true">
+                <entry key="1" value-ref="a"/>
+                <entry key="2" value-ref="b"/>
+                <entry key="3" value-ref="c"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="anotherTriangle" class="org.fer.model.Triangle" autowire="byName" scope="prototype">
+
+    </bean>
+
+    <bean id="hexagone" class="org.fer.model.Hexagone">
+        <property name="x" ref="c"/>
+    </bean>
+
+    <bean id="parentTriangle" class="org.fer.model.Triangle" abstract="true">
+        <property name="a" ref="a"/>
+        <property name="b" ref="b"/>
+    </bean>
+    <bean id="childTriangle" class="org.fer.model.Triangle" parent="parentTriangle">
+        <property name="c">
+            <bean class="org.fer.model.Point">
+                <property name="x" value="580"/>
+                <property name="y" value="1400"/>
+            </bean>
+        </property>
+    </bean>
+
+    <bean class="org.fer.processers.BeanPostProcessorImpl"></bean>
+
+    <bean class="org.fer.processers.BeanFactoryPPImpl"></bean>
+
+    <bean id="diamond" class="org.fer.model.Diamond">
+
+    </bean>
+
+    <bean id="diamondPoint" class="org.fer.model.Point">
+        <property name="x" value="100000"/>
+        <property name="y" value="200000"/>
+    </bean>
+
+    <bean id="greaterPoint" class="org.fer.model.Point">
+        <property name="x" value="1000000"/>
+        <property name="y" value="1000000"/>
+    </bean>
+
+    <bean id="loggingAop" class="org.fer.aop.test.aspects.MyAspect"></bean>
+
+    <context:component-scan base-package="org.fer"/>
+
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+
+</beans>
